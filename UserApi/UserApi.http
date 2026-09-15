@@ -1,0 +1,125 @@
+@host = http://localhost:5170
+@contentType = application/json
+
+### 1. Регистрация пользователя
+POST {{host}}/api/users/register
+Content-Type: {{contentType}}
+
+{
+  "username": "alice",
+  "password": "SuperSecret123!",
+  "age": 25
+}
+
+### 2. Повторная регистрация того же username — ожидаем 409 Conflict
+POST {{host}}/api/users/register
+Content-Type: {{contentType}}
+
+{
+  "username": "alice",
+  "password": "AnotherPass123!",
+  "age": 30
+}
+
+### 3. Логин с правильным паролем — ожидаем 200 OK
+POST {{host}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "username": "alice",
+  "password": "SuperSecret123!"
+}
+
+### 4. Логин с неправильным паролем — ожидаем 401 Unauthorized
+POST {{host}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "username": "alice",
+  "password": "wrong-password"
+}
+
+### 5. Логин несуществующего пользователя — ожидаем 401 Unauthorized
+POST {{host}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "username": "bob",
+  "password": "whatever"
+}
+
+### 6. Обновление: смена пароля (требуется текущий пароль в credential)
+PUT {{host}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "username": "alice",
+  "credential": "SuperSecret123!",
+  "newPassword": "EvenBetter456!",
+  "age": 26
+}
+
+### 7. Логин со старым паролем — ожидаем 401
+POST {{host}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "username": "alice",
+  "password": "SuperSecret123!"
+}
+
+### 8. Логин с новым паролем — ожидаем 200 OK
+POST {{host}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "username": "alice",
+  "password": "EvenBetter456!"
+}
+
+### 9. Обновление с неверным credential — ожидаем 401
+PUT {{host}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "username": "alice",
+  "credential": "wrong",
+  "age": 99
+}
+
+### 10. Обновление несуществующего пользователя — ожидаем 404
+PUT {{host}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "username": "ghost",
+  "credential": "whatever",
+  "age": 40
+}
+
+### 11. Удаление с неверным паролем — ожидаем 401
+DELETE {{host}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "username": "alice",
+  "credential": "wrong"
+}
+
+### 12. Удаление с правильным паролем — ожидаем 204 No Content
+DELETE {{host}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "username": "alice",
+  "credential": "EvenBetter456!"
+}
+
+### 13. Логин после удаления — ожидаем 401
+POST {{host}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "username": "alice",
+  "password": "EvenBetter456!"
+}
