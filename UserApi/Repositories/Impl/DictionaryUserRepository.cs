@@ -1,7 +1,6 @@
-﻿using UserApi.dto;
-using UserApi.entity;
+﻿using UserApi.Models;
 
-namespace UserApi.repository.impl;
+namespace UserApi.Repositories.Impl;
 
 public class DictionaryUserRepository : IRepository<User, string>
 {
@@ -11,13 +10,7 @@ public class DictionaryUserRepository : IRepository<User, string>
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        if (_storage.ContainsKey(entity.Username))
-        {
-            throw new ArgumentException();
-        }
-        
-        _storage.Add(entity.Username, entity);
-        return _storage[entity.Username];
+        return _storage.TryAdd(entity.Username, entity) ?  _storage[entity.Username] : throw new ArgumentException();
     }
 
     public User Delete(string username)
@@ -30,6 +23,11 @@ public class DictionaryUserRepository : IRepository<User, string>
     public User Get(string username)
     {
         return _storage[username];
+    }
+
+    public List<User> GetAll()
+    {
+        return [.. _storage.Values];
     }
 
     public User Update(User entity)

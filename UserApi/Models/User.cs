@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace UserApi.entity;
+﻿namespace UserApi.Models;
 
 public class User
 {

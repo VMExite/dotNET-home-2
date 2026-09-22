@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using UserApi.dto;
-using UserApi.entity;
-using UserApi.repository;
-using UserApi.repository.impl;
+using UserApi.Dtos;
+using UserApi.Models;
+using UserApi.Repositories;
 
-namespace UserApi.service;
+namespace UserApi.Services;
 
 public class UserService(IRepository<User, string> userRepository)
 {

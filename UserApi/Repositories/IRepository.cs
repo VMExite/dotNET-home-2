@@ -1,4 +1,4 @@
-﻿namespace UserApi.repository;
+﻿namespace UserApi.Repositories;
 
 public interface IRepository<T, TId>
 {
@@ -6,4 +6,6 @@ public interface IRepository<T, TId>
     T Delete(TId id);
     T Get(TId id);
     T Update(T entity);
+    
+    List<T> GetAll();
 }

@@ -1,7 +1,7 @@
-using UserApi.entity;
-using UserApi.repository;
-using UserApi.repository.impl;
-using UserApi.service;
+using UserApi.Models;
+using UserApi.Repositories;
+using UserApi.Repositories.Impl;
+using UserApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
